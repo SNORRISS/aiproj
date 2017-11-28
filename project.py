@@ -68,7 +68,7 @@ for x in range(0, 7198) :
     y = 0
     z = 0
     while y < 7:
-            if(nsduh_addy[x][y] == nsduh_addy[x][z]) :
+            if(nsduh_addy[x][y] == 1 & nsduh_addy[x][z] == 1) :
                  edges[y][z] = edges[y][z] + 1
             z = z + 1
             if (z == 7) :
@@ -104,8 +104,8 @@ pos=nx.circular_layout(G) # positions for all nodes
 
 nx.draw_networkx_nodes(G,pos,node_size=700)
 
-elarge=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] > 4000]
-esmall=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] <= 4000]
+elarge=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] > 1500]
+esmall=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] <= 1500]
 
 nx.draw_networkx_edges(G,pos,edgelist=elarge,
                     width=6)
