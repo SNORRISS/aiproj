@@ -61,14 +61,43 @@ nsduh_addy = nsduh_addy.as_matrix()
 edges = np.zeros((7,7))
 
 G = nx.Graph()
+BG = nx.Graph()
+
+BG.add_nodes_from(np.arange(7197),bipartite = 0, node_color = 'b')
+BG.add_nodes_from(['a', 'b', 'c', 'd', 'e', 'f', 'g'], bipartite = 1, node_color = 'r')
 
 
 
 for x in range(0, 7198) : 
     y = 0
     z = 0
+    
     while y < 7:
-            if(nsduh_addy[x][y] == 1 & nsduh_addy[x][z] == 1) :
+            if(nsduh_addy[x][y] == 1) :
+                
+                if(y == 0) :                    
+                    BG.add_edge(x, 'a')
+                    
+                if(y == 1) :
+                    BG.add_edge(x, 'b')
+                    
+                if(y == 2) :
+                    BG.add_edge(x, 'c')
+                    
+                if(y == 3) :
+                    BG.add_edge(x, 'd')
+                    
+                if(y == 4) :
+                    BG.add_edge(x, 'e')
+                    
+                if(y == 5) :
+                    BG.add_edge(x, 'f')  
+                    
+                if(y == 6) :
+                    BG.add_edge(x, 'g') 
+                    
+                    
+            if(nsduh_addy[x][y] == 1 &  nsduh_addy[x][z] == 1) :
                  edges[y][z] = edges[y][z] + 1
             z = z + 1
             if (z == 7) :
@@ -100,23 +129,44 @@ G.add_edge('e','f',weight = edges[4][5])
 G.add_edge('e','g',weight = edges[4][6])
 G.add_edge('f','g',weight = edges[5][6])
 
+#X, Y = nx.bipartite.sets(BG)
+#posB = dict()
+#posB.update( (n, (1, i)) for i, n in enumerate(X) ) # put nodes from X at x=1
+#posB.update( (n, (2, i)) for i, n in enumerate(Y) ) # put nodes from Y at x=2
+
+
+
 pos=nx.circular_layout(G) # positions for all nodes
+posB=nx.spectral_layout(BG)
+bEdges=[(u,v) for (u,v,d) in BG.edges(data=True)]
+nx.draw_networkx_nodes(BG,posB,node_size = 50,node_color = 'b')
 
-nx.draw_networkx_nodes(G,pos,node_size=700)
 
-elarge=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] > 1500]
-esmall=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] <= 1500]
+nx.draw_networkx_edges(BG,posB,bEdges,width = 1)
 
-nx.draw_networkx_edges(G,pos,edgelist=elarge,
-                    width=6)
-nx.draw_networkx_edges(G,pos,edgelist=esmall,
-                    width=6,alpha=0.5,edge_color='b',style='dashed')
-
-nx.draw_networkx_labels(G,pos,font_size=20,font_family='sans-serif')
-
+#nx.draw_networkx_labels(BG,posB,font_size=8,font_family='sans-serif')
 plt.axis('off')
-plt.savefig("weighted_graph.png") # save as png
-plt.show() # display
+plt.show()
+
+#nx.draw_networkx_nodes(G,pos,node_size=700)
+
+#elarge=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] > 1500]
+#esmall=[(u,v) for (u,v,d) in G.edges(data=True) if d['weight'] <= 1500]
+
+#nx.draw_networkx_edges(G,pos,edgelist=elarge,
+ #                   width=6)
+#nx.draw_networkx_edges(G,pos,edgelist=esmall,
+ #                   width=6,alpha=0.5,edge_color='b',style='dashed')
+
+#nx.draw_networkx_labels(G,pos,font_size=20,font_family='sans-serif')
+
+#plt.axis('off')
+#plt.savefig("weighted_graph.png") # save as png
+#plt.show() # display
+
+
+
+
     
 #plot_clusters(nsduh_addy, cluster.DBSCAN, (), {'eps':0.5})
 #plot_clusters(nsduh_addy,cluster.KMeans,(),{'n_clusters':2})
